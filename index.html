@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+    <head>
+       <meta charset="utf-8"/>
+
+       <style>
+          .container{
+              display: flex;
+              
+          }
+          .todo-list{
+              background-color: aliceblue;
+              width: 30%;
+              margin-right: 50px;
+          }
+          p{
+              background-color: aquamarine;
+              text-align: center;
+              height: 30px;
+              padding-top: 5px;
+          }
+          .done-todos{
+              background-color: skyblue;
+              width: 40%;
+              padding-top: 50px;
+          }
+          h2{
+              text-align: center;
+          }
+       </style>
+    </head>
+    <body>
+        <div class="container">
+            <div class="todo-list">
+                <h2>Todo-List</h2>
+                <p id="todo-1" draggable="true">Coding</p>
+                <p id="todo-2" draggable="true">Seeing Football</p>
+                <p id="todo-3" draggable="true">Reading</p>
+                <p id="todo-4" draggable="true">Fix my car AC</p>
+                <p id="todo-5" draggable="true">Supper</p>
+                
+            </div>
+            <div class="done-todos">
+                <h2>Done:    <span class="percentage">0</span>%</h2>
+            </div>
+       </div>
+
+
+       <script>
+           let percentage= document.querySelector(".percentage");
+           let todolistItems= document.querySelectorAll(".todo-list p");
+           let doneTodosContainer= document.querySelector(".done-todos");
+           
+
+           // EventListeners
+           todolistItems.forEach(todoItem=> {
+               todoItem.addEventListener("dragstart", (e)=> {
+                   dragStart(e);
+               })
+           })
+
+           doneTodosContainer.addEventListener("dragover", (e)=> {
+               dragOver(e);
+           })
+
+           doneTodosContainer.addEventListener("drop", (e)=> {
+               drop(e);
+           })
+
+
+           //Functions
+           function dragStart(e){
+               
+                e.currentTarget.style.backgroundColor= "yellow";
+                e.dataTransfer.setData("text/plain", e.target.id);
+                console.log(e.target.id);
+           }
+
+           function dragOver(e){
+               e.preventDefault();
+           }
+
+           function drop(e){
+            
+               const id= e.dataTransfer.getData("text");
+            
+               const draggedElement= document.getElementById(id);
+
+                doneTodosContainer.appendChild(draggedElement);
+               e.dataTransfer.clearData();
+
+               percentage.innerHTML= parseInt(percentage.innerHTML) + 20;
+
+               if(parseInt(percentage.innerHTML) < 50){
+               percentage.style.color= "red";
+           }
+           else{
+               percentage.style.color= "green";
+           }
+           }
+       </script>
+    </body>
+</html>
